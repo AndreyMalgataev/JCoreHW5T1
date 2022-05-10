@@ -16,6 +16,10 @@ import com.opencsv.bean.ColumnPositionMappingStrategy;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 import org.jetbrains.annotations.Nullable;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -41,7 +45,34 @@ public class Main {
         json = listToJson(parceXML(fileName));
         writeString(json, "data2.json");
 
+        //T3
+        fileName = "data.json";
+        List<Employee> jsonString = readString(fileName);
+        System.out.printf("Классы из файла %s\n", fileName);
+        jsonString.forEach(System.out::println);
 
+        fileName = "data2.json";
+        System.out.printf("Классы из файла %s\n", fileName);
+        jsonString = readString(fileName);
+        jsonString.forEach(System.out::println);
+
+    }
+
+    private static List<Employee> readString(String fileName) {
+        List<Employee> list = new ArrayList<>();
+        JSONParser parser = new JSONParser();
+        GsonBuilder builder = new GsonBuilder();
+        Gson gson = builder.create();
+
+        try {
+            JSONArray employees = (JSONArray) parser.parse(new FileReader(fileName));
+            for (Object employee : employees) {
+                list.add(gson.fromJson(employee.toString(), Employee.class));
+            }
+        } catch (IOException | ParseException e) {
+            System.out.println(e.getMessage());
+        }
+        return list;
     }
 
     private static List<Employee> parceXML(String fileName) {

@@ -18,4 +18,14 @@ public class Employee {
         this.country = country;
         this.age = age;
     }
+
+    @Override
+    public String toString() {
+        return String.format("Employee{id=%s, firstName='%s', lastname='%s', country='%s', age=%s}",
+                this.id,
+                this.firstName,
+                this.lastName,
+                this.country,
+                this.age);
+    }
 }
